@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SIBI AI Learning</title>
+
+    <!-- SOCKET -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+    <!-- FONT -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+
+            font-family:'Poppins', sans-serif;
+
+            background:
+            linear-gradient(
+                135deg,
+                #f8fafc,
+                #eef2ff
+            );
+
+            color:#1e293b;
+
+            width:100vw;
+            height:100vh;
+
+            overflow:hidden;
+        }
+
+        .container{
+
+            width:96%;
+            height:100vh;
+
+            margin:auto;
+
+            display:flex;
+
+            flex-direction:column;
+
+            justify-content:center;
+        }
+
+        /* ================= HEADER ================= */
+
+        .header{
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            margin-bottom:16px;
+        }
+
+        .title h1{
+
+            font-size:34px;
+
+            font-weight:700;
+
+            color:#1e3a8a;
+
+            letter-spacing:-1px;
+        }
+
+        .title p{
+
+            margin-top:4px;
+
+            font-size:15px;
+
+            color:#64748b;
+        }
+
+        .badge{
+
+            background:white;
+
+            padding:10px 18px;
+
+            border-radius:50px;
+
+            color:#2563eb;
+
+            font-weight:600;
+
+            font-size:13px;
+
+            box-shadow:
+            0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        /* ================= MAIN ================= */
+
+        .main{
+
+            flex:1;
+
+            display:grid;
+
+            grid-template-columns:1.7fr 0.9fr;
+
+            gap:18px;
+
+            min-height:0;
+        }
+
+        /* ================= CAMERA ================= */
+
+        .camera-box{
+
+            background:white;
+
+            border-radius:28px;
+
+            padding:16px;
+
+            box-shadow:
+            0 10px 35px rgba(0,0,0,0.06);
+
+            display:flex;
+
+            flex-direction:column;
+
+            overflow:hidden;
+        }
+
+        .camera-box h2{
+
+            font-size:20px;
+
+            margin-bottom:14px;
+
+            color:#1e293b;
+        }
+
+        .camera-frame{
+
+            flex:1;
+
+            width:100%;
+
+            border-radius:20px;
+
+            overflow:hidden;
+
+            border:2px solid #e2e8f0;
+
+            background:#000;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+        }
+
+        /* ================= IMPORTANT ================= */
+        /* supaya hanya 1 frame landscape */
+        /* tidak portrait memanjang */
+        /* tidak scrolling */
+        /* ============================================= */
+
+        .camera-frame img{
+
+            width:100%;
+            height:100%;
+
+            object-fit:cover;
+
+            display:block;
+        }
+
+        /* ================= SIDE ================= */
+
+        .side{
+
+            display:flex;
+
+            flex-direction:column;
+
+            gap:16px;
+
+            height:100%;
+        }
+
+        .card{
+
+            background:white;
+
+            border-radius:24px;
+
+            padding:22px;
+
+            flex:1;
+
+            box-shadow:
+            0 10px 30px rgba(0,0,0,0.05);
+
+            display:flex;
+
+            flex-direction:column;
+
+            justify-content:center;
+
+            overflow:hidden;
+        }
+
+        .card h3{
+
+            font-size:15px;
+
+            color:#64748b;
+
+            margin-bottom:10px;
+
+            font-weight:500;
+        }
+
+        .value{
+
+            font-size:34px;
+
+            font-weight:700;
+
+            line-height:1.25;
+
+            word-break:break-word;
+        }
+
+        .huruf{
+            color:#2563eb;
+        }
+
+        .kata{
+            color:#7c3aed;
+        }
+
+        .teks{
+            color:#0f766e;
+            font-size:28px;
+        }
+
+        /* ================= FOOTER ================= */
+
+        .footer{
+
+            margin-top:12px;
+
+            text-align:center;
+
+            font-size:13px;
+
+            color:#64748b;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media(max-width:1000px){
+
+            body{
+                overflow:auto;
+            }
+
+            .container{
+
+                height:auto;
+
+                padding:20px 0;
+            }
+
+            .main{
+
+                grid-template-columns:1fr;
+
+                height:auto;
+            }
+
+            .camera-frame{
+
+                height:420px;
+            }
+
+            .header{
+
+                flex-direction:column;
+
+                align-items:flex-start;
+
+                gap:12px;
+            }
+
+            .title h1{
+
+                font-size:28px;
+            }
+
+            .value{
+
+                font-size:28px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="title">
+
+            <h1>🤟 SIBI AI Learning</h1>
+
+            <p>
+                Sistem Penerjemah Bahasa Isyarat Indonesia Berbasis Artificial Intelligence
+            </p>
+
+        </div>
+
+        <div class="badge">
+
+            REALTIME DETECTION
+
+        </div>
+
+    </div>
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+        <!-- CAMERA -->
+
+        <div class="camera-box">
+
+            <h2>🎥 Live Camera Detection</h2>
+
+            <div class="camera-frame">
+
+                <!-- stream dari Flask -->
+                <img src="/video"
+                     alt="Live Camera">
+
+            </div>
+
+        </div>
+
+        <!-- SIDE -->
+
+        <div class="side">
+
+            <div class="card">
+
+                <h3>Huruf Terdeteksi</h3>
+
+                <div class="value huruf"
+                     id="huruf">-</div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Kata</h3>
+
+                <div class="value kata"
+                     id="kata">-</div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Hasil Teks</h3>
+
+                <div class="value teks"
+                     id="teks">-</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        ESP32-CAM • Flask • MediaPipe • AI Recognition
+
+    </div>
+
+</div>
+
+<script>
+
+    // ================= SOCKET =================
+
+    const socket = io();
+
+    socket.on("connect", () => {
+
+        console.log("✅ Socket Connected");
+
+    });
+
+    // ================= RECEIVE =================
+
+    socket.on("prediction", function(data){
+
+        document.getElementById("huruf").innerHTML =
+            data.huruf || "-";
+
+        document.getElementById("kata").innerHTML =
+            data.kata || "-";
+
+        document.getElementById("teks").innerHTML =
+            data.teks || "-";
+
+    });
+
+</script>
+
+</body>
+
+</html>
